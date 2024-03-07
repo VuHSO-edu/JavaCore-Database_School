@@ -3,14 +3,14 @@ CREATE DATABASE lab03;
 USE lab03;
 
 CREATE TABLE NHANVIEN (
-	HONV VARCHAR(15) DEFAULT NULL,
-    TENLOT VARCHAR(15) DEFAULT NULL,
-    TENNV VARCHAR(15) DEFAULT NULL,
-    MANV VARCHAR(15) NOT NULL PRIMARY KEY,
-    NGSINH DATE DEFAULT NULL,
-    DCHI VARCHAR(30) DEFAULT NULL,
-    PHAI VARCHAR(10) DEFAULT NULL,
-    LUONG DECIMAL(10,2) DEFAULT NULL,
+	MANV VARCHAR(15) NOT NULL PRIMARY KEY,
+	HONV VARCHAR(15) ,
+    TENLOT VARCHAR(15) ,
+    TENNV VARCHAR(15) ,
+    NGSINH DATE ,
+    DCHI VARCHAR(30),
+    PHAI ENUM ("NAM", "NU") NOT NULL,
+    LUONG DECIMAL(10,2) ,
     MA_NQL VARCHAR(30) DEFAULT NULL,
     PHG INT DEFAULT NULL
     );
@@ -47,20 +47,22 @@ CREATE TABLE CONGVIEC (
 );
 
 CREATE TABLE PHANCONG (
-	MA_NVIEN VARCHAR(15) PRIMARY KEY,
+	MA_NVIEN VARCHAR(15) ,
     MADA INT,
     STT INT,
     THOIGIAN TIME,
+    PRIMARY KEY (MA_NVIEN, MADA, STT),
 	FOREIGN KEY (MA_NVIEN) REFERENCES NHANVIEN (MANV),
 	FOREIGN KEY (MADA,STT) REFERENCES CONGVIEC (MADA,STT)
 );
 
 CREATE TABLE THANNHAN (
-	MA_NVIEN VARCHAR(15) PRIMARY KEY,
+	MA_NVIEN VARCHAR(15) ,
     TENTN VARCHAR(15),
-    PHAI ENUM("NAM","NU") UNIQUE NOT NULL,
+    PHAI ENUM ("NAM", "NU") NOT NULL,
     NGSINH DATE,
     QUANHE VARCHAR(15),
+    PRIMARY KEY (MA_NVIEN, TENTN),
     FOREIGN KEY (MA_NVIEN) REFERENCES NHANVIEN (MANV)
 );
 
@@ -73,16 +75,16 @@ CREATE TABLE THANNHAN (
 -- ALTER TABLE PHANCONG DROP FOREIGN KEY FK_MADA_STT;
 -- ALTER TABLE THANNHAN DROP FOREIGN KEY FK_THANNHAN_MANV;
 
-INSERT INTO `lab03`.`NHANVIEN` (HONV, TENLOT, TENNV, MANV, NGSINH, DCHI, PHAI, LUONG, MA_NQL, PHG)
+INSERT INTO NHANVIEN (MANV, HONV, TENLOT, TENNV, NGSINH, DCHI, PHAI, LUONG, MA_NQL, PHG)
 VALUES 
-    ('Đinh', 'Bá', 'Tiên', '009', '1960-02-11', '119 Công Quỳnh,TpHCM', 'NAM', 30000, '005', 5),
-    ('Nguyễn', 'Thanh', 'Tùng', '005', '1962-08-20', '222 Nguyễn Văn Cừ,TpHCM', 'NAM', 40000, '006', 5),
-    ('Bùi ', 'Ngọc ', 'Hằng ', '007 ', '1954-11-03', '332 Nguyễn Thái Học , Tp HCM', 'NAM', 25000, '001', 4),
-    ('Lê ', 'Quỳnh ', 'Như', '001', '1967-01-02' ,'291 Hồ Văn Huê , Tp HCM', 'NU', 43000, '006', 4),
-    ('Nguyễn ', 'Mạnh ', 'Hùng ', '004 ', '1967-04-03', '95 Bà Rịa,Vũng Tàu', 'NAM', 38000, '005', 5),
-    ('Trần ', 'Thanh ', 'Tâm ', '003 ', '1957-04-05' ,'34 Mai Thị Lựu,Tp HCM', 'NAM', 25000, '005', 5),
-    ('Trần ', 'Hồng ', 'Quang ', '008 ', '1967-01-09' ,'80 Lê Hồng Phong,Tp HCM', 'NAM', 25000, '001', 4 ),
-    ('Phạm', 'Văn', 'Vinh', '006', '1965-01-01', '45 Trưng Vương, Hà Nội', 'NU', 55000, '', 1);
+    ('009','Đinh', 'Bá', 'Tiên',  '1960-02-11', '119 Công Quỳnh,TpHCM', "NAM", 30000, '005', 5),
+    ('005','Nguyễn', 'Thanh', 'Tùng',  '1962-08-20', '222 Nguyễn Văn Cừ,TpHCM', "NAM", 40000, '006', 5),
+    ('007','Bùi ', 'Ngọc ', 'Hằng ',  '1954-11-03', '332 Nguyễn Thái Học , Tp HCM', "NAM", 25000, '001', 4),
+    ('001','Lê ', 'Quỳnh ', 'Như',  '1967-01-02' ,'291 Hồ Văn Huê , Tp HCM', "NU", 43000, '006', 4),
+    ('004','Nguyễn ', 'Mạnh ', 'Hùng ',  '1967-04-03', '95 Bà Rịa,Vũng Tàu', "NAM", 38000, '005', 5),
+    ('003','Trần ', 'Thanh ', 'Tâm ',  '1957-04-05' ,'34 Mai Thị Lựu,Tp HCM', "NAM", 25000, '005', 5),
+    ('008','Trần ', 'Hồng ', 'Quang ',  '1967-01-09' ,'80 Lê Hồng Phong,Tp HCM', "NAM", 25000, '001', 4 ),
+    ('006','Phạm', 'Văn', 'Vinh',  '1965-01-01', '45 Trưng Vương, Hà Nội', "NU", 55000, '', 1);
 
 
 INSERT INTO PHONGBAN (TENPHG, MAPHG, TRPHG, NG_NHANCHUC)
@@ -132,20 +134,20 @@ VALUES 				('009',       1,     1,      32),
 					('008',       30 ,   2 ,      5 ),
 					('001',       30 ,   1 ,     20 ),
 					('001',       20 ,   1 ,     15 ),
-					('006',       20 ,   3 ,     30 ),
-					('005' ,       3 ,   1 ,     10 ),
-					('005' ,      10 ,   2 ,     10),
+					('006',       20 ,   1 ,     30 ),
+					('005',       3 ,   1 ,     10 ),
+					('005',      10 ,   2 ,     10),
 					('005',       20,     1,     10),
 					('007',       30,     2,     30),
 					('007',       10,     2,     10);
 
 
 INSERT INTO THANNHAN (MA_NVIEN, TENTN, PHAI, NGSINH, QUANHE)
-VALUES 	('005', 'Trinh', 'Nữ', '1976-04-05', 'Con gái'),
-		('005', 'Khang', 'Nam', '1973-10-25', 'Con trai'),
-		('005', 'Phuong', 'Nữ', '1948-05-03', 'Vợ chồng'),
-		('001', 'Minh', 'Nam', '1932-02-29', 'Vợ chồng'),
-		('009', 'Tiến', 'Nam', '1978-01-01', 'Con trai'),
-		('009', 'Châu', 'Nữ', '1978-12-30', 'Con gái'),
-		('009', 'Phuong', 'Nữ', '1957-05-05', 'Vợ chồng');
+VALUES 	('005', 'Trinh', "NU", '1976-04-05', 'Con gái'),
+		('005', 'Khang', "NAM", '1973-10-25', 'Con trai'),
+		('005', 'Phuong', "NU", '1948-05-03', 'Vợ chồng'),
+		('001', 'Minh', "NAM", '1932-02-29', 'Vợ chồng'),
+		('009', 'Tiến', "NAM", '1978-01-01', 'Con trai'),
+		('009', 'Châu', "NU", '1978-12-30', 'Con gái'),
+		('009', 'Phuong', "NU", '1957-05-05', 'Vợ chồng');
 

@@ -10,6 +10,9 @@ public class MyPolynomial {
     }
 
     public int getDegree() {
+        if (coeffs.length == 0) {
+            return 0;
+        }
         return coeffs.length - 1;
     }
 

@@ -1,7 +1,7 @@
 package shape;
 
 public class Circle extends Shape {
-    private double radius = 1;
+    protected double radius = 1;
 
     public Circle() {
     }

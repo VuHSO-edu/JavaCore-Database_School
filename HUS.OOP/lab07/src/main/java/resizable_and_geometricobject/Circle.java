@@ -1,7 +1,7 @@
 package resizable_and_geometricobject;
 
 public class Circle implements GeometricObject {
-    private double radius;
+    protected double radius;
 
     public Circle(double radius) {
         this.radius = radius;

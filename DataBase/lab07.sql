@@ -152,8 +152,146 @@ VALUES 	('005', 'Trinh', "NU", '1976-04-05', 'Con gái'),
 		('009', 'Phuong', "NU", '1957-05-05', 'Vợ chồng');
         
 -- question01
+		
+	SELECT DISTINCT MADA
+    FROM ( SELECT MADA
+			FROM PHANCONG PC
+			JOIN NHANVIEN NV ON PC.MA_NVIEN = NV.MANV
+			WHERE NV.HONV = 'Đinh'
+			UNION 
+			SELECT MADA
+			FROM DEAN DA
+			JOIN PHONGBAN PB ON DA.PHONG = PB.MAPHG
+			JOIN NHANVIEN NV ON NV.MANV = PB.TRPHG
+			WHERE NV.HONV = 'Đinh' ) AS DS_DA;
+            
+-- question02
 
-	SELECT *
-    FROM DEAN
+    SELECT CONCAT_WS(' ', NHANV.HONV, NHANV.TENLOT, NHANV.TENNV) AS TENNV
+    FROM NHANVIEN NHANV
+    WHERE NHANV.MANV IN (	SELECT NV.MANV
+							FROM THANNHAN TN
+							JOIN NHANVIEN NV ON NV.MANV = TN.MA_NVIEN
+							GROUP BY TN.MA_NVIEN
+							HAVING COUNT(TN.TENTN) >= 2 );
+                            
+-- question03
+
+	SELECT MANV, TENNV
+    FROM NHANVIEN NV
+    WHERE NOT EXISTS (	SELECT *
+						FROM THANNHAN TN
+                        WHERE TN.MA_NVIEN = NV.MANV );
+                        
+-- question04
+
+	SELECT CONCAT_WS(' ', NV.HONV, NV.TENLOT, NV.TENNV) AS TENNV
+    FROM NHANVIEN NV
+    JOIN PHONGBAN PB ON NV.MANV = PB.TRPHG
+    WHERE EXISTS ( 	SELECT COUNT(*)
+					FROM NHANVIEN
+                    GROUP BY PHG );
+                    
+-- question05
+	
+    SELECT CONCAT_WS(' ', NV.HONV, NV.TENLOT, NV.TENNV) AS TEN_TRPHG
+    FROM NHANVIEN NV
+    JOIN PHONGBAN PB ON NV.MANV = PB.TRPHG
+    WHERE NOT EXISTS ( 	SELECT *
+						FROM THANNHAN TN
+						WHERE TN.MA_NVIEN = PB.TRPHG );
+                        
+-- question06
+
+	SELECT CONCAT_WS(' ', NV.HONV, NV.TENLOT, NV.TENNV) AS TENNV
+    FROM NHANVIEN NV
+    WHERE NV.LUONG > (	SELECT AVG(LUONG)
+						FROM NHANVIEN NV2
+                        JOIN PHONGBAN PB
+                        WHERE TENPHG = 'Nghiên cứu' );
+                        
+-- question07
+	
+    SELECT PB.TENPHG, CONCAT_WS(' ', NV.HONV, NV.TENLOT, NV.TENNV) AS TRUONG_PHONG
+	FROM PHONGBAN PB
+	JOIN NHANVIEN NV ON PB.TRPHG = NV.MANV
+	WHERE PB.MAPHG = (	SELECT PHG
+						FROM NHANVIEN
+						GROUP BY PHG
+						HAVING COUNT(*) = (	SELECT MAX(SLNV)
+											FROM (	SELECT COUNT(MANV) AS SLNV
+													FROM NHANVIEN
+													GROUP BY PHG ) AS max_count ) );
+
+-- question08
+	SELECT DEAN.MADA
+	FROM DEAN
+	WHERE DEAN.MADA NOT IN (
+							SELECT PHANCONG.MADA
+							FROM PHANCONG
+							WHERE PHANCONG.MA_NVIEN = '009' );
+                            
+-- question09
+	SELECT CONGVIEC.TEN_CONG_VIEC
+	FROM CONGVIEC
+	JOIN DEAN ON CONGVIEC.MADA = DEAN.MADA
+	WHERE DEAN.TENDA = 'Sản phẩm X' AND CONGVIEC.MADA NOT IN (
+																SELECT PHANCONG.MADA
+																FROM PHANCONG
+																WHERE PHANCONG.MA_NVIEN = '009');
+    
+    
+-- question10
+
+	SELECT CONCAT_WS(' ',NHANVIEN.HONV, NHANVIEN.TENLOT, NHANVIEN.TENNV) AS TENNV , NHANVIEN.DCHI AS DCHI
+	FROM NHANVIEN
+	JOIN PHANCONG ON NHANVIEN.MANV = PHANCONG.MA_NVIEN
+	JOIN DEAN ON PHANCONG.MADA = DEAN.MADA
+	JOIN PHONGBAN ON NHANVIEN.PHG = PHONGBAN.MAPHG
+	WHERE DEAN.DDIEM_DA LIKE '%TP HCM%' AND PHONGBAN.MAPHG NOT IN (	SELECT MAPHG 
+																	FROM DIADIEM_PHG 
+																	WHERE DIADIEM LIKE '%TP HCM%');
+                                                                    
+-- question11
+
+	SELECT CONCAT_WS(' ',NHANVIEN.HONV, NHANVIEN.TENLOT, NHANVIEN.TENNV) AS TENNV , NHANVIEN.DCHI AS DCHI
+	FROM NHANVIEN
+	JOIN PHANCONG ON NHANVIEN.MANV = PHANCONG.MA_NVIEN
+	JOIN DEAN ON PHANCONG.MADA = DEAN.MADA
+	JOIN PHONGBAN ON NHANVIEN.PHG = PHONGBAN.MAPHG
+	WHERE DEAN.DDIEM_DA IN ( 	SELECT DEAN.DDIEM_DA 
+								FROM DEAN ) AND PHONGBAN.MAPHG NOT IN (	SELECT MAPHG 
+														FROM DIADIEM_PHG 
+														WHERE DIADIEM IN (	SELECT DIADIEM
+																			FROM DIADIEM_PHG ));
+		
+		
+											
+									
+								
+
+                                
+                                
+	
+	
+    
+                                                
+
+    
+	
+					
+					
+    
+                            
+                            
+							
+						
+    
+	
+			
+    
+    
+										
+								
     
         

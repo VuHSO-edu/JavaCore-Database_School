@@ -120,7 +120,7 @@ public class BreadStore {
 		}
 
 		//
-		List<Bread> cheapestBreads = breadStore.filter(10, false);
+		List<Bread> cheapestBreads = breadStore.filter(10, true);
 		for (Bread bread : cheapestBreads) {
 			System.out.println(bread.getDescription() + " Cost: " + bread.cost());
 		}

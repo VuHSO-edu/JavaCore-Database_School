@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS lab09;
-CREATE DATABASE lab09;
-USE lab09;
+DROP DATABASE IF EXISTS lab10;
+CREATE DATABASE lab10;
+USE lab10;
 
 CREATE TABLE NHANVIEN (
 	MANV VARCHAR(15) NOT NULL PRIMARY KEY,
@@ -139,8 +139,7 @@ VALUES 				('009',       1,     1,      32),
 					('005',      10 ,   2 ,     10),
 					('005',       20,     1,     10),
 					('007',       30,     2,     30),
-					('007',       10,     2,     10),
-                    ('003',		   3,     1,     20);
+					('007',       10,     2,     10);
 
 
 INSERT INTO THANNHAN (MA_NVIEN, TENTN, PHAI, NGSINH, QUANHE)
@@ -153,111 +152,199 @@ VALUES 	('005', 'Trinh', "NU", '1976-04-05', 'Con gái'),
 		('009', 'Phuong', "NU", '1957-05-05', 'Vợ chồng');
         
         
+        
+        
 -- question01
 
-	
-    SELECT CONCAT_WS(' ', NV1.HONV, NV1.TENLOT, NV1.TENNV) AS TENNV
-    FROM NHANVIEN NV1
-    WHERE NOT EXISTS (	SELECT *
-						FROM DEAN DA1
-                        JOIN PHONGBAN PB ON PB.MAPHG = DA1.PHONG
-                        WHERE PB.TENPHG LIKE 'Nghiên cứu' 
-                        AND DA1.MADA NOT IN (	SELECT DISTINCT PC1.MADA
-												FROM PHANCONG PC1
-												WHERE PC1.MADA = DA1.MADA AND PC1.MA_NVIEN = NV1.MANV ) );
-	
-    SELECT CONCAT_WS(' ', NV1.HONV, NV1.TENLOT, NV1.TENNV) AS TENNV
-    FROM NHANVIEN NV1
-    WHERE NOT EXISTS (	SELECT *
-						FROM DEAN DA1
-                        JOIN PHONGBAN PB ON PB.MAPHG = DA1.PHONG
-                        WHERE PB.TENPHG LIKE 'Nghiên cứu' 
-                        AND NOT EXISTS (	SELECT DISTINCT PC1.MADA
-											FROM PHANCONG PC1
-											WHERE PC1.MADA = DA1.MADA AND PC1.MA_NVIEN = NV1.MANV ) );
-                                            
-                                            
-	SELECT CONCAT_WS(' ', NV1.HONV, NV1.TENLOT, NV1.TENNV) AS TENNV
-    FROM NHANVIEN NV1
-    WHERE NV1.MANV IN (	SELECT PC.MA_NVIEN
-						FROM PHANCONG PC
-                        JOIN DEAN DA ON DA.MADA = PC.MADA
-                        JOIN PHONGBAN PB1 ON PB1.MAPHG = DA.PHONG
-						WHERE PB1.TENPHG LIKE 'Nghiên cứu'
-                        GROUP BY PC.MA_NVIEN
-                        HAVING COUNT(DISTINCT PC.MADA) = (	SELECT COUNT(DA.MADA)
-															FROM DEAN DA
-                                                            JOIN PHONGBAN PB ON PB.MAPHG = DA.PHONG
-                                                            WHERE PB.TENPHG LIKE 'Nghiên cứu' ) );
-                                                            
+	DROP PROCEDURE IF EXISTS question_01;
+	DELIMITER //
+    
+    CREATE PROCEDURE question_01()
+    
+    BEGIN
+		SELECT CONCAT_WS(' ',  HONV, TENLOT, TENNV) AS TENNV
+		FROM NHANVIEN
+        WHERE PHG = 4;
+    
+    
+    END //
+    DELIMITER ;
+    
+    CALL question_01();
+    
+    
 -- question02
 
-	SELECT CONCAT_WS(' ', NV.HONV , NV.TENLOT , NV. TENNV) AS TENNV
-    FROM NHANVIEN NV
-    WHERE NOT EXISTS (	SELECT *
-						FROM DEAN DA
-                        WHERE DA.PHONG = 4 AND 
-								NOT EXISTS (	SELECT *
-												FROM PHANCONG PC
-                                                WHERE PC.MADA = DA.MADA AND PC.MA_NVIEN = NV.MANV ) );
+	DROP PROCEDURE IF EXISTS question_02;
+    DELIMITER //
+    
+    CREATE PROCEDURE question_02()
+    
+    BEGIN
+		
+        SELECT CONCAT_WS(' ',  HONV, TENLOT, TENNV) AS TENNV
+        FROM NHANVIEN
+        WHERE LUONG > 30000 ;
+        
+    END //
+    DELIMITER ;
+    
+    CALL question_02();
+    
+    
 -- question03
 
-	SELECT CONCAT_WS(' ', NV1.HONV , NV1.TENLOT , NV1.TENNV) AS TENNV
-    FROM NHANVIEN NV1
-    WHERE NOT EXISTS (	SELECT DA.MADA
-						FROM DEAN DA
-                        JOIN NHANVIEN NV2 ON DA.PHONG = NV2.PHG
-                        WHERE CONCAT_WS(' ', NV2.HONV , NV2.TENLOT , NV2.TENNV) LIKE 'Đinh Bá Tiên'
-							AND NOT EXISTS (	SELECT *
-												FROM PHANCONG PC
-                                                WHERE PC.MADA = DA.MADA 
-                                                AND PC.MA_NVIEN = NV1.MANV AND PC.MA_NVIEN = NV2.MANV ) );
-							
+
+	DROP PROCEDURE IF EXISTS question_03;
+    DELIMITER //
+    
+    CREATE PROCEDURE question_03()
+    BEGIN
+		SELECT CONCAT_WS(' ',  HONV, TENLOT, TENNV) AS TENNV
+		FROM NHANVIEN
+        WHERE (LUONG > 25000 AND PHG = 4) OR ( LUONG > 30000 AND PHG = 5 ) ;
+    
+    END //
+    
+    DELIMITER ;
+    
+    CALL question_03();
+    
+    
 -- question04
 
-	SELECT CONCAT_WS(' ', NV1.HONV , NV1.TENLOT , NV1.TENNV) AS TENNV
-    FROM NHANVIEN NV1
-    WHERE NOT EXISTS (	SELECT DA.MADA
-						FROM DEAN DA
-                        WHERE DA.TENDA LIKE 'San pham X' 
-							AND NOT EXISTS ( 	SELECT *
-												FROM PHANCONG PC
-                                                WHERE PC.MADA = DA.MADA AND PC.MA_NVIEN = NV1.MANV ) );
-                                                
+	DROP PROCEDURE IF EXISTS question_04;
+    DELIMITER //
+    CREATE PROCEDURE question_04()
+    BEGIN
+		SELECT CONCAT_WS(' ',  HONV, TENLOT, TENNV) AS TENNV
+        FROM NHANVIEN
+        WHERE DCHI LIKE '%TP HCM%' ;
+    END //
+    DELIMITER ;
+    
+    CALL question_04();
+    
 -- question05
 
-	SELECT CONCAT_WS(' ', NV1.HONV , NV1.TENLOT , NV1.TENNV) AS TENNV
-    FROM NHANVIEN NV1
-    WHERE NOT EXISTS (	SELECT DA.MADA
-						FROM DEAN DA
-                        WHERE DDIEM_DA LIKE 'TP HCM' 
-							AND NOT EXISTS (	SELECT *
-												FROM PHANCONG PC
-                                                WHERE PC.MADA = DA.MADA AND PC.MA_NVIEN = NV1.MANV ) );
-						
+	DROP PROCEDURE IF EXISTS question_05;
+    
+    DELIMITER //
+    CREATE PROCEDURE question_05()
+    
+    BEGIN
+		SELECT CONCAT_WS(' ',  HONV, TENLOT, TENNV) AS TENNV
+        FROM NHANVIEN
+        WHERE HONV LIKE 'N%' ;
+    
+    END //
+    DELIMITER ;
+    
+    CALL question_05();
+    
 -- question06
 
-	SELECT PB.MAPHG , PB.TENPHG
-    FROM PHONGBAN PB
-    WHERE NOT EXISTS (	SELECT DA.MADA
-						FROM DEAN DA
-                        WHERE DA.DDIEM_DA LIKE 'TP HCM' 
-							AND NOT EXISTS (	SELECT *
-												FROM DIADIEM_PHG DD
-												WHERE DD.MAPHG = PB.MAPHG AND DD.DIADIEM = DA.DDIEM_DA ) );
-							
-                                                
-                                                
-                        
-								
-						
+	DROP PROCEDURE IF EXISTS quetion_06;
     
-                                            
-                                            
-											
+    DELIMITER //
+    
+    CREATE PROCEDURE question_06()
+    
+    BEGIN
+		SELECT NGSINH , DCHI
+        FROM NHANVIEN
+        WHERE CONCAT_WS(' ',  HONV, TENLOT, TENNV) = 'Đinh Bá Tiên';
+    
+    END //
+    DELIMITER ;
+    
+    CALL question_06();
+    
+-- question07
 
+	DROP PROCEDURE IF EXISTS question_07;
+    DELIMITER //
+    CREATE PROCEDURE question_07()
+    BEGIN
+        SELECT CONCAT_WS(' ',  HONV, TENLOT, TENNV) AS TENNV
+        FROM NHANVIEN
+        WHERE YEAR(NGSINH) BETWEEN 1960 AND 1965 ;
+    END //
+    DELIMITER ;
     
+    CALL question_07();
     
+-- question08
+
+	DROP PROCEDURE IF EXISTS question_08;
+    DELIMITER //
+    CREATE PROCEDURE question_08()
+    BEGIN
+    SELECT CONCAT_WS(' ',  HONV, TENLOT, TENNV) AS TENNV , YEAR(NGSINH) AS YEAR
+    FROM NHANVIEN 
+    ORDER BY YEAR(NGSINH) ;
+    END //
+    DELIMITER ;
     
+    CALL question_08();
+    
+-- question09
+
+	DROP PROCEDURE IF EXISTS question_09;
+    DELIMITER //
+    CREATE PROCEDURE question_09()
+    BEGIN
+		SELECT	CONCAT_WS(' ',  HONV, TENLOT, TENNV) AS TENNV , YEAR(now()) - YEAR(NGSINH) AS AGE
+        FROM NHANVIEN
+        ORDER BY YEAR(NGSINH) ;
+    END //
+    DELIMITER ;
+    
+    CALL question_09();
+    
+-- question_10
+
+	DROP PROCEDURE IF EXISTS question_10;
+    DELIMITER //
+    CREATE PROCEDURE question_10()
+    BEGIN
+		SELECT PB.TENPHG , DD.DIADIEM
+        FROM PHONGBAN PB
+        JOIN DIADIEM_PHG DD ON PB.MAPHG = DD.MAPHG ;
+    END //
+    DELIMITER ;
+    
+    CALL question_10();
+    
+-- question11
+
+	DROP PROCEDURE IF EXISTS question_11;
+    DELIMITER //
+    CREATE PROCEDURE question_11()
+    BEGIN
+		SELECT PB.TENPHG , CONCAT_WS(' ',  NV.HONV, NV.TENLOT, NV.TENNV) AS TRPHG
+        FROM PHONGBAN PB
+        JOIN NHANVIEN NV ON PB.TRPHG = NV.MANV ;
+    END //
+    DELIMITER ;
+    
+    CALL question_11();
+    
+-- question_12
+
+	DROP PROCEDURE IF EXISTS question_12;
+	DELIMITER //
+    CREATE PROCEDURE question_12()
+    BEGIN
+		SELECT CONCAT_WS(' ',  NV1.HONV, NV1.TENLOT, NV1.TENNV) AS TENNV , NV1.DCHI
+        FROM NHANVIEN NV1
+        JOIN PHONGBAN PB ON NV1.PHG = PB.MAPHG 
+        WHERE PB.TENPHG LIKE 'Nghiên cứu' ;
+    END //
+    DELIMITER ;
+    
+    CALL question_12();
+    
+		
     
     

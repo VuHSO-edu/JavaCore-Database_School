@@ -12,40 +12,56 @@ public class Student extends Person{
     
     public Student(){
         // bổ sung mã lệnh ở đây 
-        scoreAvg = 0.0;
+        super();
+        this.majors = "UnRegistered";
+        this.scoreAvg = 0.0;
     }
     
     public Student(String SVcode, String mail, String majors, double score,
                     String name, Date birthday, boolean gender, String address){
-        // bổ sung mã lệnh ở đây 
+        // bổ sung mã lệnh ở đây
+        super(SVcode, name, birthday, gender, mail, address);
+        this.majors = majors;
+        this.scoreAvg = score;
     }    
 
     
     public String getMajors(){
         // bổ sung mã lệnh ở đây! Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về!
-        return "";
+        return this.majors;
     }   
     
     public double getScore(){
         // bổ sung mã lệnh ở đây! Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về!
-        return 0.0;
+        return this.scoreAvg;
     }
 
     public double getPayment(double baseAmount){
     
         // bổ sung mã lệnh ở đây! Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về!
-        return 0.0;
+        if (scoreAvg >= 8.0)
+            return baseAmount * 1.5;
+        else if (scoreAvg >= 6.5)
+            return baseAmount;
+        else
+            return baseAmount * 0.8;
     }    
 
 
     public String toString(){
-        String str = "";
         // bổ sung mã lệnh ở đây! Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về!
-        return str;
+        return "Student Code: " + getCode() + "\n" +
+                "Name: " + getName() + "\n" +
+                "Birthday: " + getBirthday() + "\n" +
+                "Gender: " + getGender() + "\n" +
+                "Email: " + getEmail() + "\n" +
+                "Address: " + getAddress() + "\n" +
+                "Majors: " + majors + "\n" +
+                "Score Average: " + scoreAvg;
     }
 
 }

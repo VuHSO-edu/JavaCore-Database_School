@@ -20,8 +20,13 @@ public class Person{
     public Person(String code, String name, Date birthday, boolean gender, String mail, String address){
 
         this.name = normalizeName(name);
-        // bổ sung mã lệnh ở đây 
-    }  
+        // bổ sung mã lệnh ở đây
+        this.personCode = code;
+        this.birthday = birthday;
+        this.gender = gender;
+        this.email = mail;
+        this.address = address;
+    }
     
     public static String normalizeName(String name){
         String str = name;
@@ -52,7 +57,12 @@ public class Person{
     public String toString(){
         // bổ sung mã lệnh ở đây! Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về!
-        return "";
+        return "Person Code: " + personCode + "\n" +
+                "Name: " + name + "\n" +
+                "Birthday: " + birthday.toString() + "\n" +
+                "Gender: " + (gender ? "Male" : "Female") + "\n" +
+                "Email: " + email + "\n" +
+                "Address: " + address;
     }
     
     public int getAge(int currentYear) throws ArithmeticException{
@@ -64,13 +74,13 @@ public class Person{
     public String getCode(){
         // bổ sung mã lệnh ở đây! Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về!   
-        return "";
+        return this.personCode;
     }
 
     public String getName(){
         // bổ sung mã lệnh ở đây! Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về! 
-        return "";
+        return this.name;
     }
     
      public String getBirthday(){
@@ -87,13 +97,13 @@ public class Person{
     public String getEmail(){
         // bổ sung mã lệnh ở đây! Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về!  
-        return "";
+        return this.email;
     } 
 
     public String getAddress(){
         // bổ sung mã lệnh ở đây! Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về!   
-        return "";
+        return this.address;
     }
     
  }

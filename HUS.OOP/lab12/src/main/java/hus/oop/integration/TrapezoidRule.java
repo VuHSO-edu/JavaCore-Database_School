@@ -6,6 +6,8 @@ public class TrapezoidRule implements Integrator {
 
     public TrapezoidRule(double precision, int maxIterations) {
         /* TODO */
+        this.precision = precision;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -21,6 +23,19 @@ public class TrapezoidRule implements Integrator {
     @Override
     public double integrate(Polynomial poly, double lower, double upper) {
         /* TODO */
+        int numOfSubIntervals = 1;
+        double currentApprox = integrate(poly, lower, upper, numOfSubIntervals);
+        double previousApprox;
+        int iteration = 0;
+
+        do {
+            numOfSubIntervals *= 2;
+            previousApprox = currentApprox;
+            currentApprox = integrate(poly, lower, upper, numOfSubIntervals);
+            iteration++;
+        } while (iteration < maxIterations && Math.abs(currentApprox - previousApprox) / 3.0 >= precision);
+
+        return currentApprox;
     }
 
     /**
@@ -33,5 +48,14 @@ public class TrapezoidRule implements Integrator {
      */
     private double integrate(Polynomial poly, double lower, double upper, int numOfSubIntervals) {
         /* TODO */
+        double intervalLength = (upper - lower) / numOfSubIntervals;
+        double sum = (poly.evaluate(lower) + poly.evaluate(upper)) / 2.0;
+
+        for (int i = 1; i < numOfSubIntervals; i++) {
+            double x = lower + i * intervalLength;
+            sum += poly.evaluate(x);
+        }
+
+        return sum * intervalLength;
     }
 }

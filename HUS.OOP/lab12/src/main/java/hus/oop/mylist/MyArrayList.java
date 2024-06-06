@@ -10,6 +10,8 @@ public class MyArrayList extends MyAbstractList {
      */
     public MyArrayList() {
         /* TODO */
+        this.data = new Object[DEFAULT_CAPACITY];
+        this.size = 0;
     }
 
     /**
@@ -19,6 +21,7 @@ public class MyArrayList extends MyAbstractList {
     @Override
     public int size() {
         /* TODO */
+        return this.size;
     }
 
     /**
@@ -29,6 +32,11 @@ public class MyArrayList extends MyAbstractList {
     @Override
     public Object get(int index) {
         /* TODO */
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+
+        return data[index];
     }
 
     /**
@@ -38,6 +46,11 @@ public class MyArrayList extends MyAbstractList {
     @Override
     public void remove(int index) {
         /* TODO */
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+
+        System.arraycopy(data, index + 1, data, index, size - index - 1);
     }
 
     /**
@@ -48,6 +61,11 @@ public class MyArrayList extends MyAbstractList {
     @Override
     public void append(Object payload) {
         /* TODO */
+        if (size == data.length) {
+            enlarge();
+        }
+        data[size] = payload;
+        size++;
     }
 
     /**
@@ -59,6 +77,15 @@ public class MyArrayList extends MyAbstractList {
     @Override
     public void insert(Object payload, int index) {
         /* TODO */
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+
+        if (size == data.length) {
+            enlarge();
+        }
+
+        System.arraycopy(data, index, data, index + 1, size - index);
     }
 
     /**
@@ -68,6 +95,7 @@ public class MyArrayList extends MyAbstractList {
     @Override
     public MyIterator iterator() {
         /* TODO */
+        return new MyArrayListIterator(this.data);
     }
 
     /**
@@ -75,5 +103,9 @@ public class MyArrayList extends MyAbstractList {
      */
     private void enlarge() {
         /* TODO */
+        int newCapacity = data.length * 2;
+        Object[] newData = new Object[newCapacity];
+        System.arraycopy(data, 0, newData, 0, size);
+        data = newData;
     }
 }

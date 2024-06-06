@@ -17,11 +17,40 @@ public class EduCenter{
     public static Person[] readData(Scanner scan){
         // bổ sung mã lệnh. Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về!
-
+        int n = scan.nextInt();
+        Person[] persons = new Person[n];
         try{
         // bổ sung mã lệnh ở đây! Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về!
         // Thứ tự dữ liệu nhập: Đọc và thực hiện đúng theo yêu cầu như trong mô tả
+            for (int i = 0; i < n; i++) {
+                String type = scan.next(); // read the type of person (Staff or Student)
+                if (type.equals("Staff")) {
+                    // read Staff data and create Staff object
+                    String code = scan.next();
+                    String mail = scan.next();
+                    String dept = scan.next();
+                    double salary = scan.nextDouble();
+                    Date recruit = new Date(scan.nextInt(), scan.nextInt(), scan.nextInt());
+                    String name = scan.next();
+                    Date birthday = new Date(scan.nextInt(), scan.nextInt(), scan.nextInt());
+                    boolean gender = scan.nextBoolean();
+                    String address = scan.next();
+                    persons[i] = new Staff(code, mail, dept, salary, recruit, name, birthday, gender, address);
+                } else if (type.equals("Student")) {
+                    // read Student data and create Student object
+                    String SVcode = scan.next();
+                    String mail = scan.next();
+                    String majors = scan.next();
+                    double score = scan.nextDouble();
+                    String name = scan.next();
+                    Date birthday = new Date(scan.nextInt(), scan.nextInt(), scan.nextInt());
+                    boolean gender = scan.nextBoolean();
+                    String address = scan.next();
+                    persons[i] = new Student(SVcode, mail, majors, score, name, birthday, gender, address);
+                }
+            }
+            return persons;
         } catch(ArithmeticException ArtmExcp){
             System.out.print(ArtmExcp.getMessage() );       
             return null;
@@ -30,8 +59,7 @@ public class EduCenter{
             return null;
         }
         // Có thể sửa giá trị trả về của lệnh return
-        // nhưng không thay đổi kiểu trả về!        
-        return null;
+        // nhưng không thay đổi kiểu trả về!
     }
     
     public static ArrayList<Person> listOfStaff(Person[] listPerson){
@@ -39,7 +67,11 @@ public class EduCenter{
         ArrayList<Person> results = new ArrayList<Person>();
         // bổ sung mã lệnh ở đây! Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về!
-        
+        for (Person person : listPerson) {
+            if (person instanceof Staff) {
+                results.add(person);
+            }
+        }
         if ( results.size() > 0)
             return results;
         else
@@ -61,16 +93,33 @@ public class EduCenter{
                 }
             }
      }
-     
+
      public static void sortStudentByScore(ArrayList<Person> listStudent){
         // bổ sung mã lệnh ở đây! Không thay đổi khai báo phương thức!
         // Tham khảo phương thức sortStaffBySalary
-     }     
+         int n = listStudent.size();
+         Student studentI, studentJ;
+         for (int i = 0; i < n-1; i++) {
+             for(int j = i + 1; j < n; j++){
+                 studentI = (Student)listStudent.get(i);
+                 studentJ = (Student)listStudent.get(j);
+                 if(studentI.getScore() > studentJ.getScore()){
+                     Person tmp = listStudent.get(i);
+                     listStudent.set(i, listStudent.get(j));
+                     listStudent.set(j, tmp);
+                 }
+             }
+         }
+     }
 
     public static ArrayList<Person> listOfStudent(Person[] listPerson){
 
         ArrayList<Person> results = new ArrayList<Person>();
-
+        for (Person person : listPerson) {
+            if (person instanceof Student) {
+                results.add(person);
+            }
+        }
         // bổ sung mã lệnh ở đây! Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về!
         if(results.size() > 0)
@@ -83,6 +132,11 @@ public class EduCenter{
 
         // bổ sung mã lệnh ở đây! Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về!
+         for (Person person : listPerson) {
+             if (person.getCode().equals(code)) {
+                 return person;
+             }
+         }
         return null;
      }
 
@@ -91,6 +145,9 @@ public class EduCenter{
         if(listPerson != null){
             
             // bổ sung mã lệnh ở đây!
+            for (Person person : listPerson) {
+                System.out.println(person.toString());
+            }
             
         } else{
             System.out.println("No any person in this list!");
@@ -108,9 +165,13 @@ public class EduCenter{
                 if(listPerson.get(i).getClass().getSimpleName().equals("Staff")){
                     /* Đặt staff = (Staff)(đối tượng thứ i). Bổ sung lệnh để in ra xâu ký tự theo mẫu sau:
                     staff.toString() + " Income:" + String.valueOf(staff.getRealEarnings(currentYear)) */
+                    Staff staff = (Staff) listPerson.get(i);
+                    System.out.println(staff.toString() + " Income:" + String.valueOf(staff.getRealEarnings(currentYear)));
                 }else{
                     /* Đặt student = (Student)(đối tượng thứ i). Bổ sung lệnh để in ra xâu ký tự theo mẫu sau:
                     student.toString() + " Total Fees:" + String.valueOf(student.getPayment(baseAmount) ) */;
+                    Student student = (Student) listPerson.get(i);
+                    System.out.println(student.toString() + " Total Fees:" + String.valueOf(student.getPayment(baseAmount)));
                 }
             }
         } else{
@@ -123,6 +184,17 @@ public class EduCenter{
         // Bổ sung mã lệnh để phương thức này có thể sắp xếp mảng theo thứ tự tăng dần 
         // của phần tên LastName (từ cuối cùng của tên đầy đủ) các đối tượng Person
         // Dùng phương thức lớp String: str1.compareTo(String str2) để so hai xâu str1 và str2.
+         int n = listPerson.length;
+         for (int i = 0; i < n-1; i++) {
+             for (int j = 0; j < n-i-1; j++) {
+                 if (listPerson[j].getLastName().compareTo(listPerson[j+1].getLastName()) > 0) {
+                     // Swap listPerson[j] and listPerson[j+1]
+                     Person temp = listPerson[j];
+                     listPerson[j] = listPerson[j+1];
+                     listPerson[j+1] = temp;
+                 }
+             }
+         }
      }  
      
      public static ArrayList<Person> searchByMajors(Person[] listPerson, String majors){
@@ -130,7 +202,16 @@ public class EduCenter{
         // trùng với tham đối majors! Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về!
 
-        return null;
+         ArrayList<Person> results = new ArrayList<Person>();
+         for (Person person : listPerson) {
+             if (person instanceof Student) {
+                 Student student = (Student) person;
+                 if (student.getMajors().equals(majors)) {
+                     results.add(student);
+                 }
+             }
+         }
+         return results.size() > 0 ? results : null;
      } 
      
 

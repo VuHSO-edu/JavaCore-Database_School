@@ -20,6 +20,8 @@ public class MyArrayListIterator implements MyIterator {
      */
     public MyArrayListIterator(Object[] data) {
         /* TODO */
+        this.data = data;
+        this.currentPosition = 0;
     }
 
     /**
@@ -30,6 +32,7 @@ public class MyArrayListIterator implements MyIterator {
     @Override
     public boolean hasNext() {
         /* TODO */
+        return currentPosition < data.length;
     }
 
     /**
@@ -39,5 +42,11 @@ public class MyArrayListIterator implements MyIterator {
     @Override
     public Object next() {
         /* TODO */
+        if (currentPosition >= data.length) {
+            return null;
+        }
+        Object currentElement = data[currentPosition];
+        currentPosition++;
+        return currentElement;
     }
 }

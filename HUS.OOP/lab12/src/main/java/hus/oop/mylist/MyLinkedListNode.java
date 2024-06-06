@@ -6,21 +6,27 @@ public class MyLinkedListNode {
 
     public MyLinkedListNode(Object payload) {
         /* TODO */
+        this.payload = payload;
     }
 
     public MyLinkedListNode(Object payload, MyLinkedListNode next) {
         /* TODO */
+        this.payload = payload;
+        this.next = next;
     }
 
     public Object getPayload() {
         /* TODO */
+        return this.payload;
     }
 
     public MyLinkedListNode getNext() {
         /* TODO */
+        return this.next;
     }
 
     public void setNext(MyLinkedListNode node) {
         /* TODO */
+        this.next = node;
     }
 }

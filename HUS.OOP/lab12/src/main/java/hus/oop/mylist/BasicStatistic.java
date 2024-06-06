@@ -8,6 +8,7 @@ public class BasicStatistic {
      */
     public BasicStatistic(MyList data) {
         /* TODO */
+        this.data = data;
     }
 
     /**
@@ -16,6 +17,18 @@ public class BasicStatistic {
      */
     public double max() {
         /* TODO */
+        double max = Double.NEGATIVE_INFINITY;
+        MyIterator iterator = data.iterator();
+        while (iterator.hasNext()) {
+            Object nextValue = iterator.next();
+            if (nextValue != null) {
+                double value = (double) nextValue;
+                if (value > max) {
+                    max = value;
+                }
+            }
+        }
+        return max;
     }
 
     /**
@@ -24,6 +37,18 @@ public class BasicStatistic {
      */
     public double min() {
         /* TODO */
+        double min = Double.POSITIVE_INFINITY;
+        MyIterator iterator = data.iterator();
+        while (iterator.hasNext()) {
+            Object nextValue = iterator.next();
+            if (nextValue != null) {
+                double value = (double) nextValue;
+                if (value < min) {
+                    min = value;
+                }
+            }
+        }
+        return min;
     }
 
     /**
@@ -32,6 +57,19 @@ public class BasicStatistic {
      */
     public double mean() {
         /* TODO */
+        double sum = 0.0;
+        int count = 0;
+        MyIterator iterator = data.iterator();
+        while (iterator.hasNext()) {
+            Object nextValue = iterator.next();
+            if (nextValue != null) {
+                double value = (double) nextValue;
+                sum += value;
+                count++;
+            }
+
+        }
+        return count > 0 ? sum / count : 0;
     }
 
     /**
@@ -40,5 +78,16 @@ public class BasicStatistic {
      */
     public double variance() {
         /* TODO */
+        double mean = mean();
+        double temp = 0;
+        MyIterator iterator = data.iterator();
+        while (iterator.hasNext()) {
+            Object nextValue = iterator.next();
+            if(nextValue != null) {
+                double value = (double) nextValue;
+                temp += (mean-value)*(mean-value);
+            }
+        }
+        return temp / (data.size() - 1);
     }
 }

@@ -6,6 +6,8 @@ public class SimpsonRule implements Integrator {
 
     public SimpsonRule(double precision, int maxIterations) {
         /* TODO */
+        this.precision = precision;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -21,6 +23,19 @@ public class SimpsonRule implements Integrator {
     @Override
     public double integrate(Polynomial poly, double lower, double upper) {
         /* TODO */
+        int numOfSubIntervals = 2;
+        double currentApprox = integrate(poly, lower, upper, numOfSubIntervals);
+        double previousApprox;
+        int iteration = 0;
+
+        do {
+            numOfSubIntervals *= 2;
+            previousApprox = currentApprox;
+            currentApprox = integrate(poly, lower, upper, numOfSubIntervals);
+            iteration++;
+        } while (iteration < maxIterations && Math.abs(currentApprox - previousApprox) / 15.0 >= precision);
+
+        return currentApprox;
     }
 
     /**
@@ -33,5 +48,18 @@ public class SimpsonRule implements Integrator {
      */
     private double integrate(Polynomial poly, double lower, double upper, int numOfSubIntervals) {
         /* TODO */
+        double intervalLength = (upper - lower) / numOfSubIntervals;
+        double sum = poly.evaluate(lower) + poly.evaluate(upper);
+
+        for (int i = 1; i < numOfSubIntervals; i++) {
+            double x = lower + i * intervalLength;
+            if (i % 2 == 0) {
+                sum += 2 * poly.evaluate(x);
+            } else {
+                sum += 4 * poly.evaluate(x);
+            }
+        }
+
+        return (intervalLength / 3) * sum;
     }
 }

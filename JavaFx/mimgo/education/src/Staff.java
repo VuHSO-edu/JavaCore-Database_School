@@ -12,26 +12,32 @@ public class Staff extends Person{
     private double salary;
 
     public Staff(){
-        // bổ sung mã lệnh ở đây 
-        salary = 0.0;
+        // bổ sung mã lệnh ở đây
+        super();
+        this.department = "Office";
+        this.recruitment = new Date();
+        this.salary = 0.0;
     }
 
     public Staff(String code, String mail, String dept, double salary, Date recruit,
                     String name, Date birthday, boolean gender, String address){
         // bổ sung mã lệnh ở đây 
-       
+        super(code, name, birthday, gender, mail, address);
+        this.department = dept;
+        this.salary = salary;
+        this.recruitment = recruit;
     }
 
     public String getDepartment(){
         // bổ sung mã lệnh ở đây! Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về!
-        return "";
+        return this.department;
     }
 
     public double getSalary(){
         // bổ sung mã lệnh ở đây! Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về!
-        return 0.0;
+        return this.salary;
     }
     
     public int getSeniority(int currentYear) throws ArithmeticException{
@@ -46,15 +52,28 @@ public class Staff extends Person{
 
         // bổ sung mã lệnh ở đây! Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về!
-        return 0.0;
+
+        if (currentYear > recruitment.getYear())
+            return this.salary + (currentYear - recruitment.getYear()) * 0.05 * this.salary;
+        else {
+            return salary;
+        }
     }
 
 
     public String toString(){
-        String str = "";
+
         // bổ sung mã lệnh ở đây! Có thể sửa giá trị trả về của lệnh return
         // nhưng không thay đổi kiểu trả về!
-        return str;
+        return "Staff Code: " + getCode() + "\n" +
+                "Name: " + getName() + "\n" +
+                "Birthday: " + getBirthday() + "\n" +
+                "Gender: " + getGender() + "\n" +
+                "Email: " + getEmail() + "\n" +
+                "Address: " + getAddress() + "\n" +
+                "Department: " + department + "\n" +
+                "Recruitment Date: " + recruitment.toString() + "\n" +
+                "Salary: " + salary;
     }
 
 }

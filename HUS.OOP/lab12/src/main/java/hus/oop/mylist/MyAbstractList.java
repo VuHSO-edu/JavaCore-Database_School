@@ -8,5 +8,16 @@ public abstract class MyAbstractList implements MyList {
     @Override
     public String toString() {
         /* TODO */
+        StringBuilder sb = new StringBuilder();
+        MyIterator iterator = this.iterator();
+        sb.append("[");
+        for (int i = 0; i < size(); i++) {
+            sb.append(get(i));
+            if (i < size() - 1) {
+                sb.append("] [");
+            }
+        }
+        sb.append("]");
+        return sb.toString();
     }
 }

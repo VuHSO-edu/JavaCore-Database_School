@@ -1,5 +1,7 @@
 package hus.oop.mylist;
 
+import java.util.NoSuchElementException;
+
 public class MyLinkedListIterator implements MyIterator {
     /* GỢI Ý: */
     /*
@@ -24,6 +26,7 @@ public class MyLinkedListIterator implements MyIterator {
     @Override
     public boolean hasNext() {
         /* TODO */
+        return currentNode != null;
     }
 
     /**
@@ -33,5 +36,11 @@ public class MyLinkedListIterator implements MyIterator {
     @Override
     public Object next() {
         /* TODO */
+        if (currentNode == null) {
+            return null;
+        }
+        Object payload = currentNode.getPayload();
+        currentNode = currentNode.getNext();
+        return payload;
     }
 }

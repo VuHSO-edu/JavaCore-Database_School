@@ -8,6 +8,18 @@ public abstract class AbstractPolynomial implements Polynomial {
     @Override
     public String toString() {
         /* TODO */
+        StringBuilder sb = new StringBuilder();
+        double[] coefficients = coefficients();
+        for (int i = 0; i < coefficients.length; i++) {
+            if (i == 0) {
+                sb.append(coefficients[i]);
+            } else if (i == 1) {
+                sb.append(" + ").append(coefficients[i]).append("x");
+            } else {
+                sb.append(" + ").append(coefficients[i]).append("x^").append(i);
+            }
+        }
+        return sb.toString();
     }
 
     /**
@@ -16,5 +28,11 @@ public abstract class AbstractPolynomial implements Polynomial {
      */
     public double[] differentiate() {
         /* TODO */
+        double[] coefficients = coefficients();
+        double[] derivativeCoefficients = new double[coefficients.length - 1];
+        for (int i = 1; i < coefficients.length; i++) {
+            derivativeCoefficients[i - 1] = coefficients[i] * i;
+        }
+        return derivativeCoefficients;
     }
 }

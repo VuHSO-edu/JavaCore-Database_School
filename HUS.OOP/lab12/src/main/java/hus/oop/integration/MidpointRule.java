@@ -6,6 +6,8 @@ public class MidpointRule implements Integrator {
 
     public MidpointRule(double precision, int maxIterations) {
         /* TODO */
+        this.precision = precision;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -21,6 +23,19 @@ public class MidpointRule implements Integrator {
     @Override
     public double integrate(Polynomial poly, double lower, double upper) {
         /* TODO */
+        int numOfSubIntervals = 1;
+        double currentApprox = integrate(poly, lower, upper, numOfSubIntervals);
+        double previousApprox;
+        int iteration = 0;
+
+        do {
+            numOfSubIntervals *= 2;
+            previousApprox = currentApprox;
+            currentApprox = integrate(poly, lower, upper, numOfSubIntervals);
+            iteration++;
+        } while (iteration < maxIterations && Math.abs(currentApprox - previousApprox) / 3.0 >= precision);
+
+        return currentApprox;
     }
 
     /**
@@ -33,5 +48,14 @@ public class MidpointRule implements Integrator {
      */
     private double integrate(Polynomial poly, double lower, double upper, int numOfSubIntervals) {
         /* TODO */
+        double intervalLength = (upper - lower) / numOfSubIntervals;
+        double sum = 0.0;
+
+        for (int i = 0; i < numOfSubIntervals; i++) {
+            double midpoint = lower + (i + 0.5) * intervalLength;
+            sum += poly.evaluate(midpoint);
+        }
+
+        return sum * intervalLength;
     }
 }

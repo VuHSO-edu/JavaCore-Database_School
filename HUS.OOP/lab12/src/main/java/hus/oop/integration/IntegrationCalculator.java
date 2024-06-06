@@ -10,6 +10,7 @@ public class IntegrationCalculator {
      */
     public IntegrationCalculator(Polynomial poly) {
         /* TODO */
+        this.poly = poly;
     }
 
     /**
@@ -19,17 +20,22 @@ public class IntegrationCalculator {
      */
     public IntegrationCalculator(Integrator integrator, Polynomial poly) {
         /* TODO */
+        this.poly = poly;
+        this.integrator = integrator;
     }
 
     public void setPoly(Polynomial poly) {
         /* TODO */
+        this.poly = poly;
     }
 
     public void setIntegrator(Integrator integrator) {
         /* TODO */
+        this.integrator = integrator;
     }
 
     public double integrate(double lower, double upper) {
         /* TODO */
+        return integrator.integrate(poly, lower, upper);
     }
 }
